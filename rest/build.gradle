@@ -1,0 +1,16 @@
+apply plugin: 'java-library'
+apply plugin: "kotlin"
+apply plugin: "kotlin-kapt"
+
+dependencies {
+    def dependencies = rootProject.ext.dependencies
+    api dependencies.kotlin
+    api dependencies.threeTenBpNoTzdb
+    api dependencies.rxJava
+    api dependencies.retrofit
+    implementation dependencies.moshi
+    kapt dependencies.moshiKotlinCodegen
+}
+
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"

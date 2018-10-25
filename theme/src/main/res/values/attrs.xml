@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="contentHorizontalMargin" format="reference" />
+    <attr name="contentVerticalMargin" format="reference" />
+    <attr name="contentDividerDimen" format="reference" />
+    <attr name="selectableMinimumHeight" format="reference" />
+    <attr name="toolbarElevation" format="reference" />
+</resources>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.Weather" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/primaryMaterialLight</item>
+        <item name="colorPrimaryDark">@color/primaryDarkMaterialLight</item>
+        <item name="colorAccent">@color/accentMaterialLight</item>
+        <item name="contentHorizontalMargin">@dimen/contentHorizontalMargin</item>
+        <item name="contentVerticalMargin">@dimen/contentVerticalMargin</item>
+        <item name="contentDividerDimen">@dimen/contentDividerDimen</item>
+        <item name="selectableMinimumHeight">@dimen/selectableMinimumHeight</item>
+        <item name="toolbarElevation">@dimen/toolbarElevation</item>
+        <item name="actionBarStyle">@style/Widget.Weather.ActionBar.Solid</item>
+        <item name="android:windowBackground">@color/windowBackground</item>
+    </style>
+
+    <style name="Widget.Weather.ActionBar.Solid" parent="Widget.AppCompat.ActionBar.Solid">
+
+    </style>
+</resources>

@@ -1,0 +1,44 @@
+apply plugin: 'com.android.library'
+apply plugin: "kotlin-android"
+apply plugin: "kotlin-kapt"
+
+android {
+    def app = rootProject.ext.android
+
+    compileSdkVersion app.compileSdkVersion
+
+    defaultConfig {
+        minSdkVersion app.minSdkVersion
+        targetSdkVersion app.targetSdkVersion
+        versionCode app.versionCode
+        versionName app.versionName
+
+        testInstrumentationRunner app.testInstrumentationRunner
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+}
+
+dependencies {
+    def dependencies = rootProject.ext.dependencies
+
+    api project(":scheduler")
+
+    implementation dependencies.kotlin
+    api dependencies.rxJava
+    implementation dependencies.rxAndroid
+
+    implementation dependencies.dagger
+    kapt dependencies.daggerCompiler
+
+    testImplementation dependencies.junit
+    androidTestImplementation dependencies.testRunner
+    androidTestImplementation dependencies.espressoCore
+}

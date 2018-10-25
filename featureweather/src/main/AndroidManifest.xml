@@ -1,0 +1,17 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="weather.feature.weather">
+
+    <application>
+
+        <activity-alias
+            android:name="weather.Main"
+            android:targetActivity=".WeatherActivity">
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity-alias>
+
+        <activity android:name=".WeatherActivity" />
+    </application>
+</manifest>

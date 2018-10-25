@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="selectableMinimumHeight">48dp</dimen>
+    <dimen name="contentHorizontalMargin">16dp</dimen>
+    <dimen name="contentVerticalMargin">16dp</dimen>
+    <dimen name="contentDividerDimen">8dp</dimen>
+    <dimen name="toolbarElevation">4dp</dimen>
+</resources>

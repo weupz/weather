@@ -1,0 +1,45 @@
+
+buildscript {
+    ext.kotlinVersion = "1.2.71"
+    ext.androidGradleVersion = "3.2.1"
+    ext.jetifier = "com.android.tools.build.jetifier:jetifier-processor:1.0.0-beta02"
+    def kotlinVersion = ext.kotlinVersion
+    def androidGradleVersion = ext.androidGradleVersion
+    def jetifier = ext.jetifier
+    repositories {
+        google()
+        jcenter()
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:$androidGradleVersion"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+        classpath jetifier
+    }
+}
+
+apply from: 'config.gradle'
+
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        maven { url 'https://jitpack.io' }
+    }
+    configurations.all {
+        resolutionStrategy {
+            force dependencies.appCompat,
+                dependencies.lifecycleCommon,
+                dependencies.lifecycleRuntime,
+                dependencies.collection,
+                dependencies.archCoreCommon,
+                dependencies.annotation,
+                dependencies.daggerAndroidCompiler,
+                dependencies.jetifier,
+                dependencies.okHttp
+        }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
