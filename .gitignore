@@ -36,6 +36,8 @@ Thumbs.db
 .idea/caches
 .idea/libraries
 .idea/gradle.xml
+.idea/kotlinc.xml
+.idea/kotlinScripting.xml
 .idea/misc.xml
 .idea/modules.xml
 .idea/runConfigurations.xml

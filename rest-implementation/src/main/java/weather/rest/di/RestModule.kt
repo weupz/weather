@@ -12,7 +12,6 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import weather.rest.ServiceCreator
 import weather.rest.create
-import weather.rest.implementation.BuildConfig
 import weather.rest.implementation.RetrofitServiceCreator
 import weather.rest.json.IconUriJsonAdapter
 import weather.rest.json.TextZonedDateTimeJsonAdapter
