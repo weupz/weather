@@ -4,6 +4,7 @@ import dagger.BindsInstance
 import dagger.Component
 import dagger.android.support.AndroidSupportInjectionModule
 import weather.di.ActivityScope
+import weather.di.Cached
 import weather.di.DiModule
 import weather.rest.RestComponent
 import weather.scheduler.SchedulersComponent
@@ -17,7 +18,9 @@ internal interface WeatherActivityComponent {
 
     fun inject(activity: WeatherActivity)
 
-    fun presenterCallback(): PresenterCallback
+    fun viewModel(): WeatherPresenter
+
+    @Cached val viewModel: WeatherPresenter
 
     @Component.Builder
     interface Builder {

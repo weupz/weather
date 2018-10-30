@@ -10,6 +10,7 @@ import weather.rest.service.ForecastService
 import weather.scheduler.Schedulers
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
+import java.text.DecimalFormat
 import java.util.Locale
 import java.util.Random
 import java.util.concurrent.TimeUnit
@@ -22,6 +23,7 @@ internal class Repository @Inject constructor(
 ) {
 
     private val random = Random()
+    private val temperaturFormat = DecimalFormat("#.#")
     private val params = CurrentWeatherParams.CityName("Jakarta", "id").toMap()
 
     private fun <T> Single<T>.retryWhenTooManyRequestsOrTimeout() = retryWhen { es ->
@@ -82,7 +84,7 @@ internal class Repository @Inject constructor(
                     sunset = sys.sunset,
                     weather = "${w.main} (${w.description})",
                     icon = IconCodeMapper.code(w.id),
-                    temperature = data.temperature,
+                    temperature = temperaturFormat.format(data.temperature),
                     nextLoad = now.plusSeconds(randomDelay)
                 )
                 Flowable.merge(Flowable.just(Event.Success(result)), repeater)

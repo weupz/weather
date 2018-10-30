@@ -1,23 +1,37 @@
 package weather.feature.weather
 
+import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
-import io.reactivex.disposables.Disposable
+import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
 import org.threeten.bp.Duration
 import org.threeten.bp.ZonedDateTime
 import weather.mvi.DefaultPresenter
-import weather.mvi.DefaultPresenter.IntentFactory
 import weather.scheduler.Schedulers
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-internal class PresenterCallback @Inject constructor(
+internal class WeatherPresenter @Inject constructor(
     private val repository: Repository,
     private val schedulers: Schedulers
-) : DefaultPresenter.Callback<WeatherView, State, Event> {
+) : DefaultPresenter<State, Event>(), WeatherViewModel {
 
-    override fun createIntents(intentFactory: IntentFactory<WeatherView, State>): Flowable<Event> {
-        val stop = intentFactory.intent { it.stopSync() }
-        return intentFactory.intentState { it.startSync() }
+    private val subject = PublishSubject.create<Unit>()
+
+    override fun retry() {
+        subject.onNext(Unit)
+    }
+
+    override val states: Flowable<State> =
+        super.states.distinctUntilChanged().observeOn(schedulers.main)
+
+    override fun createIntents(): Flowable<Event> {
+        val stop = lifecycleEvents.filter { it === LifecycleEvent.Detach }
+            .toFlowable(BackpressureStrategy.LATEST)
+        return state {
+            val attach = lifecycleEvents.filter { it === LifecycleEvent.Attach }
+            Observable.merge(attach, subject)
+        }
             .flatMap { (_, state) ->
                 val now = ZonedDateTime.now()
                 if (state.data == null ||
@@ -54,10 +68,5 @@ internal class PresenterCallback @Inject constructor(
                 }
             }
         }
-    }
-
-    override fun subscribeToStates(states: Flowable<State>, view: WeatherView): Disposable {
-        return states.distinctUntilChanged().observeOn(schedulers.main)
-            .subscribe { view.renderState(it) }
     }
 }

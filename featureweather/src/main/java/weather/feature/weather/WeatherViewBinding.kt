@@ -11,7 +11,7 @@ import com.mikepenz.iconics.IconicsDrawable
 import org.threeten.bp.ZonedDateTime
 import weather.imageloader.GlideApp
 
-class WeatherViewBinding private constructor(private val view: ViewGroup) {
+internal class WeatherViewBinding private constructor(private val view: ViewGroup) {
 
     private val requests = GlideApp.with(view)
 
@@ -55,7 +55,7 @@ class WeatherViewBinding private constructor(private val view: ViewGroup) {
     private fun renderData(it: Data) {
         city.text = it.city
         country.text = it.country
-        temperature.text = it.temperature.toString()
+        temperature.text = it.temperature
         weather.text = it.weather
         val now = ZonedDateTime.now()
         val icon = if (now.isAfter(it.sunrise) && now.isBefore(it.sunset)) {

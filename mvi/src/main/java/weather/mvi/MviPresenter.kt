@@ -1,6 +1,6 @@
 package weather.mvi
 
-interface MviPresenter<in V : MviView> {
-    fun attachView(view: V)
+interface MviPresenter {
+    fun attachView()
     fun detachView()
 }

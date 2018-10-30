@@ -35,6 +35,7 @@ Thumbs.db
 # Android Studio
 .idea/caches
 .idea/libraries
+.idea/assetWizardSettings.xml
 .idea/gradle.xml
 .idea/kotlinc.xml
 .idea/kotlinScripting.xml

@@ -6,15 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import dagger.android.support.AndroidSupportInjection
-import io.reactivex.Observable
+import io.reactivex.disposables.Disposable
 import weather.mvi.lifecycle.PresenterManager
+import weather.mvi.subscribe
 import javax.inject.Inject
 
 class WeatherFragment : Fragment(), WeatherView {
 
     private lateinit var binding: WeatherViewBinding
+    private var disposable: Disposable? = null
 
-    @Inject fun presenter(manager: PresenterManager<WeatherView>) {
+    @Inject internal lateinit var viewModel: WeatherViewModel
+    @Inject internal fun presenter(manager: PresenterManager) {
         manager.assign(lifecycle)
     }
 
@@ -35,11 +38,14 @@ class WeatherFragment : Fragment(), WeatherView {
         binding = WeatherViewBinding.bind(view as ViewGroup)
     }
 
-    override fun renderState(state: State) {
-        binding.run { this.state = state }
+    override fun onStart() {
+        super.onStart()
+        disposable = viewModel.subscribe { binding.state = it }
     }
 
-    override fun startSync(): Observable<Unit> = Observable.just(Unit)
-
-    override fun stopSync(): Observable<Unit> = Observable.empty()
+    override fun onStop() {
+        disposable?.dispose()
+        disposable = null
+        super.onStop()
+    }
 }

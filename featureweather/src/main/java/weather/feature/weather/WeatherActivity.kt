@@ -7,11 +7,13 @@ import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
 import weather.di.component
+import weather.mvi.ViewModel
 import javax.inject.Inject
 
 class WeatherActivity : AppCompatActivity(), HasSupportFragmentInjector {
 
     @Inject internal lateinit var injector: DispatchingAndroidInjector<Fragment>
+    @Inject internal lateinit var weatherViewModel: ViewModel<State>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.Theme_Weather)
