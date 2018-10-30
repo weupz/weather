@@ -7,7 +7,7 @@ interface WeatherView : MviView {
 
     fun renderState(state: State)
 
-    fun load(): Observable<Unit>
+    fun startSync(): Observable<Unit>
 
-    fun resetError(): Observable<Unit>
+    fun stopSync(): Observable<Unit>
 }

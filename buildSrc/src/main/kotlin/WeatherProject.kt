@@ -68,6 +68,8 @@ object WeatherProject {
         const val daggerCompiler = "com.google.dagger:dagger-compiler:${version.dagger}"
         const val daggerAndroidCompiler = "com.google.dagger:dagger-android-processor:${version.dagger}"
         const val recyclerviewAdapter = "com.hannesdorfmann:adapterdelegates4:4.0.0"
+        const val iconics = "com.mikepenz:iconics-core:3.1.0"
+        const val iconicsWeather = "com.mikepenz:weather-icons-typeface:2.0.10.5@aar"
 
         object Glide {
             const val glide = "com.github.bumptech.glide:glide:${version.glide}"
@@ -77,6 +79,4 @@ object WeatherProject {
 
         @JvmField val glide = Glide
     }
-
-    @JvmField val openWeatherMapAppId = System.getenv("OPEN_WEATHER_MAP_APP_ID")
 }

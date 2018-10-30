@@ -96,7 +96,6 @@ class DefaultPresenter<in V : MviView, S, A> internal constructor(
                 intentStateCreators.forEach {
                     val observable = it.second(view).flatMap(mapper)
                     disposable.add(observable.subscribeWith(DisposableIntentObserver(it.first)))
-                    return@forEach
                 }
             }
         }

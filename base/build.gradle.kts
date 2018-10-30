@@ -45,6 +45,8 @@ dependencies {
     implementation(project(":imageloader"))
 
     implementation(dependencies.appCompat)
+    implementation(dependencies.iconics)
+    implementation(dependencies.iconicsWeather)
     implementation(dependencies.kotlin)
     implementation(dependencies.threeTenAbp)
     implementation(dependencies.okHttp)

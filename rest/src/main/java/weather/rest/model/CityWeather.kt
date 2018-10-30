@@ -12,7 +12,7 @@ data class CityWeather(
     @Json(name = "name")
     val name: String,
     @Json(name = "main")
-    val main: Main,
+    val data: Main,
     @Json(name = "sys")
     val sys: Sys,
     @Json(name = "coord")

@@ -12,6 +12,8 @@
             </intent-filter>
         </activity-alias>
 
-        <activity android:name=".WeatherActivity" />
+        <activity
+            android:name=".WeatherActivity"
+            android:theme="@style/Theme.Weather" />
     </application>
 </manifest>

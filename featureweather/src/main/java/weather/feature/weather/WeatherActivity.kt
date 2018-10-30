@@ -14,6 +14,7 @@ class WeatherActivity : AppCompatActivity(), HasSupportFragmentInjector {
     @Inject internal lateinit var injector: DispatchingAndroidInjector<Fragment>
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.Theme_Weather)
         super.onCreate(savedInstanceState)
         supportFragmentInjector()
         setContentView(R.layout.weather_activity)

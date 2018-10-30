@@ -6,6 +6,8 @@ import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.jakewharton.threetenabp.AndroidThreeTen
+import com.mikepenz.iconics.Iconics
+import com.mikepenz.weather_icons_typeface_library.WeatherIcons
 import weather.di.COMPONENT_NAME
 import weather.imageloader.ImageLoaderGlideModule
 
@@ -19,6 +21,8 @@ class App : Application() {
         super.onCreate()
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO)
         AndroidThreeTen.init(this)
+        Iconics.init(applicationContext)
+        Iconics.registerFont(WeatherIcons())
     }
 
     override fun getSystemService(name: String?): Any? = when (name) {

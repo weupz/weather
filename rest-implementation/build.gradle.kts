@@ -45,7 +45,12 @@ android {
 buildConfigKotlin {
     sourceSet("main") {
         packageName("weather.rest")
-        buildConfig("OPEN_WEATHER_MAP_APP_ID", WeatherProject.openWeatherMapAppId)
+        val appId = System.getenv("OPEN_WEATHER_MAP_APP_ID")?.takeIf { it.isNotEmpty() }
+            ?: project.properties["OPEN_WEATHER_MAP_APP_ID"] as String?
+            ?: throw NullPointerException(
+                "Provide OPEN_WEATHER_MAP_APP_ID as environment variable or project property"
+            )
+        buildConfig("OPEN_WEATHER_MAP_APP_ID", appId)
     }
 }
 

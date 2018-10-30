@@ -32,14 +32,14 @@ class WeatherFragment : Fragment(), WeatherView {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding = WeatherViewBinding.bind(view)
+        binding = WeatherViewBinding.bind(view as ViewGroup)
     }
 
     override fun renderState(state: State) {
         binding.run { this.state = state }
     }
 
-    override fun load(): Observable<Unit> = Observable.just(Unit)
+    override fun startSync(): Observable<Unit> = Observable.just(Unit)
 
-    override fun resetError(): Observable<Unit> = Observable.empty()
+    override fun stopSync(): Observable<Unit> = Observable.empty()
 }
