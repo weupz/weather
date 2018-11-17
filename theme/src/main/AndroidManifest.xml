@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="weather.theme">
 
-    <application android:theme="@style/Theme.Weather.Launch" />
+    <application android:theme="@style/Theme.Weather" />
 </manifest>

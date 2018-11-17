@@ -16,10 +16,16 @@ internal class WeatherPresenter @Inject constructor(
     private val schedulers: Schedulers
 ) : DefaultPresenter<State, Event>(), WeatherViewModel {
 
-    private val subject = PublishSubject.create<Unit>()
+    private val subject = PublishSubject.create<Any>()
+    private val retry: Observable<Any> inline get() = subject.filter { it == RETRY }
+    private val toggleUnit: Observable<Any> inline get() = subject.filter { it == TOGGLE_UNIT }
 
     override fun retry() {
-        subject.onNext(Unit)
+        subject.onNext(RETRY)
+    }
+
+    override fun toggleUnitType() {
+        subject.onNext(TOGGLE_UNIT)
     }
 
     override val states: Flowable<State> =
@@ -28,9 +34,9 @@ internal class WeatherPresenter @Inject constructor(
     override fun createIntents(): Flowable<Event> {
         val stop = lifecycleEvents.filter { it === LifecycleEvent.Detach }
             .toFlowable(BackpressureStrategy.LATEST)
-        return state {
+        val sync = state {
             val attach = lifecycleEvents.filter { it === LifecycleEvent.Attach }
-            Observable.merge(attach, subject)
+            Observable.merge(attach, retry)
         }
             .flatMap { (_, state) ->
                 val now = ZonedDateTime.now()
@@ -48,11 +54,23 @@ internal class WeatherPresenter @Inject constructor(
                 }
             }
             .switchMap { repository.load().takeUntil(stop) }
+        val toggleUnit = toggleUnit.map<Event> { Event.ToggleUnit }
+            .toFlowable(BackpressureStrategy.LATEST)
+        return Flowable.merge(sync, toggleUnit)
     }
 
     override fun compose(events: Flowable<Event>): Flowable<State> {
         return events.scan(State()) { state, event ->
             when (event) {
+                Event.ToggleUnit -> {
+                    state.copy(
+                        unitType = if (state.unitType === State.UnitType.Metric) {
+                            State.UnitType.Imperial
+                        } else {
+                            State.UnitType.Metric
+                        }
+                    )
+                }
                 Event.Loading -> {
                     state.copy(loading = true, errorCode = 0, errorMessage = null)
                 }
@@ -68,5 +86,10 @@ internal class WeatherPresenter @Inject constructor(
                 }
             }
         }
+    }
+
+    private companion object {
+        private const val RETRY = 1
+        private const val TOGGLE_UNIT = 2
     }
 }

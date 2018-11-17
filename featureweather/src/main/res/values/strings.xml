@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="weather_humidity_label">Humidity</string>
+    <string name="weather_atmospheric_pressure_label">Atmospheric Pressure</string>
+    <string name="weather_wind_speed_label">Wind Speed</string>
+
+    <string name="wind_speed_unit_metric">km/h</string>
+    <string name="wind_speed_unit_imperial">mph</string>
+    <string name="atmospheric_pressure_unit">kPa</string>
+    <string name="humidity_unit">%</string>
+</resources>

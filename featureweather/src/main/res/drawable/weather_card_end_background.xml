@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/weatherCardBackground" />
+    <corners
+        android:bottomRightRadius="@dimen/weather_card_radius"
+        android:topRightRadius="@dimen/weather_card_radius" />
+</shape>

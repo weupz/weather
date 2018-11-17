@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="wic_strong_wind">wic-strong-wind</string>
+    <string name="wic_cloud_down">wic-cloud-down</string>
+    <string name="wic_humidity">wic-humidity</string>
+</resources>

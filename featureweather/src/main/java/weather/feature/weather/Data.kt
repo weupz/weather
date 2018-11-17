@@ -7,9 +7,12 @@ data class Data internal constructor(
     val country: String,
     val weather: String,
     val icon: Icon,
-    val temperature: String,
+    val temperature: Temperature,
     val time: ZonedDateTime,
     val sunrise: ZonedDateTime,
     val sunset: ZonedDateTime,
+    val humidity: Float,
+    val windSpeed: WindSpeed,
+    val pressure: Float,
     val nextLoad: ZonedDateTime
 )

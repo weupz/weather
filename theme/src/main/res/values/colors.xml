@@ -3,5 +3,5 @@
     <color name="primaryMaterialLight">#FF5722</color>
     <color name="primaryDarkMaterialLight">#E64A19</color>
     <color name="accentMaterialLight">#009688</color>
-    <color name="windowBackground">#90CAF9</color>
+    <color name="windowBackground">#E6E9F3</color>
 </resources>

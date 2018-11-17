@@ -4,4 +4,5 @@ import weather.mvi.ViewModel
 
 interface WeatherViewModel : ViewModel<State> {
     fun retry()
+    fun toggleUnitType()
 }

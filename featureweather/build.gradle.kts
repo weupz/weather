@@ -51,8 +51,9 @@ dependencies {
     implementation(dependencies.constraintLayout)
 
     implementation(dependencies.kotlin)
-    implementation(dependencies.iconics)
-    implementation(dependencies.iconicsWeather)
+    implementation(dependencies.iconics.core)
+    implementation(dependencies.iconics.weather)
+    implementation(dependencies.iconics.view)
 
     implementation(dependencies.dagger)
     implementation(dependencies.daggerAndroidSupport)

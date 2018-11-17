@@ -5,15 +5,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat
-import com.bumptech.glide.signature.ObjectKey
-import com.mikepenz.iconics.IconicsDrawable
 import org.threeten.bp.ZonedDateTime
 import weather.imageloader.GlideApp
+import java.text.DecimalFormat
 
 internal class WeatherViewBinding private constructor(private val view: ViewGroup) {
 
     private val requests = GlideApp.with(view)
+    lateinit var viewModel: WeatherViewModel
 
     private var _state: State? = null
 
@@ -21,15 +20,23 @@ internal class WeatherViewBinding private constructor(private val view: ViewGrou
         get() = _state
         set(value) {
             _state = value
-            value?.data?.let { renderData(it) }
+            TransitionManager.beginDelayedTransition(view)
+            value?.data?.let { renderData(it, value.unitType) }
             this.progressBar = renderProgressBar(this.progressBar, value)
         }
 
+    private val weatherLayout = view.findViewById<View>(R.id.weatherLayout)
     private val city = view.findViewById<TextView>(R.id.city)
     private val country = view.findViewById<TextView>(R.id.country)
     private val temperature = view.findViewById<TextView>(R.id.temperature)
+    private val temperatureUnitMetric = view.findViewById<ImageView>(R.id.temperatureUnitMetric)
+    private val temperatureUnitImperial = view.findViewById<ImageView>(R.id.temperatureUnitImperial)
     private val weather = view.findViewById<TextView>(R.id.weather)
     private val weatherIcon = view.findViewById<ImageView>(R.id.weatherIcon)
+    private val wind = view.findViewById<TextView>(R.id.wind)
+    private val pressure = view.findViewById<TextView>(R.id.pressure)
+    private val humidity = view.findViewById<TextView>(R.id.humidity)
+    private val windUnit = view.findViewById<TextView>(R.id.windUnit)
     private var progressBar: View? = null
 
     init {
@@ -37,6 +44,9 @@ internal class WeatherViewBinding private constructor(private val view: ViewGrou
             .fitCenter()
             .signature(ObjectKey(view.resources.configuration.orientation))
             .into(view.findViewById(R.id.cityImage))
+        val toggle = View.OnClickListener { viewModel.toggleUnitType() }
+        temperatureUnitMetric.setOnClickListener(toggle)
+        temperatureUnitImperial.setOnClickListener(toggle)
     }
 
     private fun renderProgressBar(it: View?, state: State?): View? {
@@ -49,13 +59,18 @@ internal class WeatherViewBinding private constructor(private val view: ViewGrou
             view.removeView(progressBar)
             progressBar = null
         }
+        if (progressBar == null) {
+            weatherLayout.visibility = View.VISIBLE
+        } else {
+            weatherLayout.visibility = View.GONE
+        }
         return progressBar
     }
 
-    private fun renderData(it: Data) {
+    private fun renderData(it: Data, unitType: State.UnitType) {
         city.text = it.city
         country.text = it.country
-        temperature.text = it.temperature
+        temperature.text = unitType.valueOf(it.temperature).format()
         weather.text = it.weather
         val now = ZonedDateTime.now()
         val icon = if (now.isAfter(it.sunrise) && now.isBefore(it.sunset)) {
@@ -66,9 +81,24 @@ internal class WeatherViewBinding private constructor(private val view: ViewGrou
             .color(ContextCompat.getColor(view.context, R.color.primaryMaterialLight))
         weatherIcon.setImageDrawable(icon)
         weatherIcon.contentDescription = it.weather
+        wind.text = unitType.valueOf(it.windSpeed).format()
+        pressure.text = it.pressure.format()
+        humidity.text = it.humidity.format()
+        if (unitType == State.UnitType.Metric) {
+            windUnit.setText(R.string.wind_speed_unit_metric)
+            temperatureUnitMetric.visibility = View.VISIBLE
+            temperatureUnitImperial.visibility = View.GONE
+        } else {
+            windUnit.setText(R.string.wind_speed_unit_imperial)
+            temperatureUnitMetric.visibility = View.GONE
+            temperatureUnitImperial.visibility = View.VISIBLE
+        }
     }
 
     companion object {
+        private val decimalFormat = DecimalFormat("#.#")
+        private fun Number.format(): String = decimalFormat.format(this)
+
         fun bind(view: ViewGroup): WeatherViewBinding {
             return WeatherViewBinding(view)
         }

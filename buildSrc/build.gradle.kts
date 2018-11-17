@@ -10,13 +10,13 @@ repositories {
 }
 
 plugins {
-    kotlin("jvm") version "1.3.0"
+    kotlin("jvm") version "1.3.10"
     id("com.github.kukuhyoniatmoko.buildconfigkotlin") version "1.0.5"
 }
 
 buildConfigKotlin {
     sourceSet("main") {
-        buildConfig(name = "kotlinVersion", value = "1.3.0")
+        buildConfig(name = "kotlinVersion", value = "1.3.10")
         buildConfig(name = "androidGradleVersion", value = "3.2.1")
     }
 }
@@ -27,5 +27,5 @@ java {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.0")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.10")
 }

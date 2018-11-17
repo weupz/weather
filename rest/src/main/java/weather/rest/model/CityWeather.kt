@@ -40,7 +40,7 @@ data class CityWeather(
         @Json(name = "pressure")
         val pressure: Float,
         @Json(name = "humidity")
-        val humidity: Int
+        val humidity: Float
     )
 
     @JsonClass(generateAdapter = true)

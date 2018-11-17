@@ -1,5 +1,6 @@
 package weather.feature.weather
 
+import com.squareup.moshi.JsonDataException
 import io.reactivex.Flowable
 import io.reactivex.Single
 import org.threeten.bp.Duration
@@ -10,12 +11,12 @@ import weather.rest.service.ForecastService
 import weather.scheduler.Schedulers
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
-import java.text.DecimalFormat
 import java.util.Locale
 import java.util.Random
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
 import javax.inject.Inject
+import kotlin.math.min
 
 internal class Repository @Inject constructor(
     private val service: ForecastService,
@@ -23,7 +24,6 @@ internal class Repository @Inject constructor(
 ) {
 
     private val random = Random()
-    private val temperaturFormat = DecimalFormat("#.#")
     private val params = CurrentWeatherParams.CityName("Jakarta", "id").toMap()
 
     private fun <T> Single<T>.retryWhenTooManyRequestsOrTimeout() = retryWhen { es ->
@@ -48,8 +48,9 @@ internal class Repository @Inject constructor(
             is SocketTimeoutException -> Event.Error(2, null)
             is UnknownHostException -> Event.Error(3, null)
             is HttpException -> Event.Error(it.code(), null)
+            is JsonDataException -> Event.Error(4, null)
+            else -> Event.Error(1, null)
         }
-        Event.Error(1, "")
     }
 
     fun load(): Flowable<Event> {
@@ -57,11 +58,9 @@ internal class Repository @Inject constructor(
         val data = service.cityWeather(params)
             .subscribeOn(schedulers.io)
             .retryWhenTooManyRequestsOrTimeout()
-            .flatMapPublisher { (_, name, data, sys, _, weather, _, _, _, date) ->
+            .flatMapPublisher { (_, name, data, sys, _, weather, _, _, wind, date) ->
                 val now = ZonedDateTime.now()
                 val delay = when {
-                    now.isBefore(sys.sunrise) -> Duration.between(now, sys.sunrise)
-                    now.isBefore(sys.sunset) -> Duration.between(now, sys.sunset)
                     now.minusHours(2).isBefore(date) -> Duration.ofSeconds(0)
                     else -> {
                         val startOfNextDay = now
@@ -71,7 +70,9 @@ internal class Repository @Inject constructor(
                         Duration.between(now, startOfNextDay)
                     }
                 }
-                val randomDelay = delay.seconds + random.nextInt(MAX_RANDOM)
+                val randomDelay = min(delay.seconds, TWO_HOURS_IN_SECOND) + random.nextInt(
+                    MAX_RANDOM
+                )
                 val repeater = Flowable.timer(randomDelay, TimeUnit.SECONDS, schedulers.computation)
                     .flatMap { load() }
 
@@ -84,7 +85,13 @@ internal class Repository @Inject constructor(
                     sunset = sys.sunset,
                     weather = "${w.main} (${w.description})",
                     icon = IconCodeMapper.code(w.id),
-                    temperature = temperaturFormat.format(data.temperature),
+                    temperature = Temperature(data.temperature, Temperature.Unit.Celsius),
+                    humidity = data.humidity,
+                    windSpeed = WindSpeed(
+                        value = wind.speed * WIND_SPEED_MULTIPLIER,
+                        unit = WindSpeed.Unit.KilometersPerHour
+                    ),
+                    pressure = data.pressure * PRESSURE_MULTIPLIER,
                     nextLoad = now.plusSeconds(randomDelay)
                 )
                 Flowable.merge(Flowable.just(Event.Success(result)), repeater)
@@ -97,5 +104,9 @@ internal class Repository @Inject constructor(
         private const val DELAY_MULTIPLIER = 15
         private const val TOO_MANY_REQUEST = 429
         private const val MAX_RANDOM = 30 * 60
+        private const val TWO_HOURS_IN_SECOND: Long = 2 * 60 * 60
+
+        private const val PRESSURE_MULTIPLIER = 0.1f
+        private const val WIND_SPEED_MULTIPLIER = 3.6f
     }
 }
