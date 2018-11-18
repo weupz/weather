@@ -10,6 +10,7 @@ buildscript {
         classpath("com.android.tools.build:gradle:$androidGradleVersion")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
         classpath(jetifier)
+        classpath(WeatherProject.dependencies.sqldelight)
     }
 }
 
@@ -37,6 +38,10 @@ allprojects {
     }
 }
 
-tasks.register("clean", Delete::class.java) {
+tasks.register("clean", Delete::class) {
     delete(rootProject.buildDir)
+}
+
+tasks.withType(Wrapper::class) {
+    setDistributionType(Wrapper.DistributionType.ALL)
 }

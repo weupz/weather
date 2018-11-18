@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import dagger.android.support.AndroidSupportInjection
 import io.reactivex.disposables.Disposable
 import weather.mvi.lifecycle.PresenterManager
 import weather.mvi.subscribe

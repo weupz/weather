@@ -34,6 +34,7 @@ class WeatherActivity : AppCompatActivity(), HasSupportFragmentInjector {
                 if (!::injector.isInitialized) {
                     DaggerWeatherActivityComponent.builder()
                         .rest(component())
+                        .data(component())
                         .schedulers(component())
                         .activity(this)
                         .build()

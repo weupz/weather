@@ -15,6 +15,7 @@ object WeatherProject {
         const val androidGradle = BuildConfig.androidGradleVersion
         const val androidx = "1.0.0"
         const val lifecycle = "2.0.0"
+        const val room = "2.1.0-alpha02"
         const val kotlin = BuildConfig.kotlinVersion
         const val threeTenBp = "1.3.7"
         const val threeTenAbp = "1.1.1"
@@ -22,8 +23,9 @@ object WeatherProject {
         const val rxAndroid = "2.1.0"
         const val okHttp = "3.11.0"
         const val retrofit = "2.4.0"
+        const val sqldelight = "1.0.0-rc2"
         const val moshi = "1.7.0"
-        const val dagger = "2.18"
+        const val dagger = "2.19"
         const val glide = "4.8.0"
     }
 
@@ -39,6 +41,15 @@ object WeatherProject {
         const val collection = "androidx.collection:collection:${version.androidx}"
         const val annotation = "androidx.annotation:annotation:${version.androidx}"
         const val jetifier = "com.android.tools.build.jetifier:jetifier-processor:1.0.0-beta02"
+
+        object Room {
+            const val runtime = "androidx.room:room-runtime:${version.room}"
+            const val compiler = "androidx.room:room-compiler:${version.room}"
+            const val rx = "androidx.room:room-rxjava2:${version.room}"
+            const val testing = "androidx.room:room-testing:${version.room}"
+        }
+
+        @JvmField val room = Room
 
         object databinding {
             const val compiler = "androidx.databinding:compiler:${version.androidGradle}"
@@ -61,6 +72,7 @@ object WeatherProject {
         const val retrofit = "com.squareup.retrofit2:retrofit:${version.retrofit}"
         const val retrofitRxJava = "com.squareup.retrofit2:adapter-rxjava2:${version.retrofit}"
         const val retrofitMoshi = "com.squareup.retrofit2:converter-moshi:${version.retrofit}"
+        const val sqldelight = "com.squareup.sqldelight:gradle-plugin:${version.sqldelight}"
         const val moshi = "com.squareup.moshi:moshi:${version.moshi}"
         const val moshiKotlinCodegen = "com.squareup.moshi:moshi-kotlin-codegen:${version.moshi}"
         const val dagger = "com.google.dagger:dagger:${version.dagger}"
@@ -85,5 +97,9 @@ object WeatherProject {
         }
 
         @JvmField val glide = Glide
+    }
+
+    object plugins {
+        const val sqldelight = "com.squareup.sqldelight.android"
     }
 }

@@ -1,6 +1,7 @@
 include(
     ":app",
     ":base",
+    ":data",
     ":rest",
     ":rest-implementation",
     ":di",

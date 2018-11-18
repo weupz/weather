@@ -45,6 +45,7 @@ dependencies {
     implementation(project(":di"))
     implementation(project(":mvi-lifecycle"))
     implementation(project(":imageloader"))
+    implementation(project(":data"))
 
     implementation(dependencies.appCompat)
     implementation(dependencies.material)

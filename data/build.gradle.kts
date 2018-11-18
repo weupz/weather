@@ -37,26 +37,21 @@ android {
 
 dependencies {
     val dependencies = WeatherProject.dependencies
-
-    implementation(project(":data"))
-    implementation(project(":theme"))
-    implementation(project(":di"))
-    implementation(project(":rest-implementation"))
-    implementation(project(":scheduler-implementation"))
-    implementation(project(":imageloader"))
-
-    implementation(dependencies.appCompat)
-    implementation(dependencies.iconics.core)
-    implementation(dependencies.iconics.weather)
     implementation(dependencies.kotlin)
-    implementation(dependencies.threeTenAbp)
-    implementation(dependencies.okHttp)
+
+    implementation(dependencies.room.runtime)
+    kapt(dependencies.room.compiler)
+    implementation(dependencies.room.rx)
+    implementation(dependencies.rxJava)
     implementation(dependencies.moshi)
+    kapt(dependencies.moshiKotlinCodegen)
 
     implementation(dependencies.dagger)
     kapt(dependencies.daggerCompiler)
 
+    testImplementation(dependencies.room.testing)
     testImplementation(dependencies.junit)
     androidTestImplementation(dependencies.testRunner)
+    androidTestImplementation(dependencies.testRules)
     androidTestImplementation(dependencies.espressoCore)
 }

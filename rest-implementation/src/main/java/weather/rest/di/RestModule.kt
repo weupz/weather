@@ -24,23 +24,24 @@ import javax.inject.Singleton
 @Module
 object RestModule {
 
+    @JvmStatic fun providesMoshi(): Moshi {
+        return Moshi.Builder()
+            .add(UnixZonedDateTimeJsonAdapter)
+            .add(TextZonedDateTimeJsonAdapter)
+            .add(IconUriJsonAdapter)
+            .build()
+    }
+
     @Provides @JvmStatic @Singleton
     internal fun providesServiceCreator(
         client: OkHttpClient,
-        baseUrl: HttpUrl
+        baseUrl: HttpUrl,
+        moshi: Moshi
     ): ServiceCreator {
         val retrofit = Retrofit.Builder()
             .baseUrl(baseUrl)
             .callFactory(client.newBuilder().addNetworkInterceptor(ParamsInterceptor()).build())
-            .addConverterFactory(
-                MoshiConverterFactory.create(
-                    Moshi.Builder()
-                        .add(UnixZonedDateTimeJsonAdapter)
-                        .add(TextZonedDateTimeJsonAdapter)
-                        .add(IconUriJsonAdapter)
-                        .build()
-                )
-            )
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
         return RetrofitServiceCreator(retrofit)

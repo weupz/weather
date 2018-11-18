@@ -1,16 +1,15 @@
 package weather.feature.weather
 
-import com.squareup.moshi.JsonDataException
 import io.reactivex.Flowable
 import io.reactivex.Single
 import org.threeten.bp.Duration
 import org.threeten.bp.ZonedDateTime
 import retrofit2.HttpException
+import weather.rest.map
 import weather.rest.service.CurrentWeatherParams
 import weather.rest.service.ForecastService
 import weather.scheduler.Schedulers
 import java.net.SocketTimeoutException
-import java.net.UnknownHostException
 import java.util.Locale
 import java.util.Random
 import java.util.concurrent.TimeUnit
@@ -44,13 +43,7 @@ internal class Repository @Inject constructor(
     }
 
     private fun Flowable<Event>.onErrorReturnEvent() = onErrorReturn {
-        when (it) {
-            is SocketTimeoutException -> Event.Error(2, null)
-            is UnknownHostException -> Event.Error(3, null)
-            is HttpException -> Event.Error(it.code(), null)
-            is JsonDataException -> Event.Error(4, null)
-            else -> Event.Error(1, null)
-        }
+        it.map { code, message -> Event.Error(code, message) }
     }
 
     fun load(): Flowable<Event> {
