@@ -19,9 +19,9 @@ internal interface WeatherActivityComponent {
 
     fun inject(activity: WeatherActivity)
 
-    fun viewModel(): WeatherPresenter
+    fun weatherViewModel(): WeatherPresenter
 
-    @Cached val viewModel: WeatherPresenter
+    @Cached val weatherViewModel: WeatherPresenter
 
     @Component.Builder
     interface Builder {

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Widget.Weather.AutoCompleteTextView" parent="Widget.AppCompat.Light.AutoCompleteTextView">
+        <item name="android:popupBackground">@drawable/search_view_popup_background</item>
+        <item name="android:popupElevation">4dp</item>
+    </style>
+
+    <style name="Widget.Weather.SearchView.ActionBar" parent="Widget.AppCompat.Light.SearchView">
+        <item name="layout">@layout/toolbar_search_view</item>
+        <item name="queryHint">@string/search_city_hint</item>
+        <item name="closeIcon">@drawable/ic_action_close_dark</item>
+        <item name="searchHintIcon">@drawable/ic_action_search_dark</item>
+        <item name="android:maxWidth">9999dp</item>
+    </style>
+
+    <style name="ThemeOverlay.Weather.Dark.Toolbar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="searchViewStyle">@style/Widget.Weather.SearchView.ActionBar</item>
+    </style>
+
+    <style name="Theme.Weather.SearchView">
+        <item name="searchViewStyle">@style/Widget.Weather.SearchView.ActionBar</item>
+        <item name="autoCompleteTextViewStyle">@style/Widget.Weather.AutoCompleteTextView</item>
+    </style>
+</resources>

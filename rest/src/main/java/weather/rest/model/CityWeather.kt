@@ -21,8 +21,6 @@ data class CityWeather(
     val weather: List<Weather>,
     @Json(name = "clouds")
     val clouds: Clouds,
-    @Json(name = "visibility")
-    val visibility: Int,
     @Json(name = "wind")
     val wind: Wind,
     @Json(name = "dt") @UnixZonedDateTime

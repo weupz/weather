@@ -11,7 +11,15 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
+        android:background="@drawable/toolbar_background"
         android:elevation="?attr/toolbarElevation"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
+        android:theme="@style/ThemeOverlay.Weather.Dark.Toolbar" />
+
+    <View
+        android:id="@+id/dropdown_anchor"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="?attr/contentHorizontalMargin"
+        android:layout_marginTop="64dp"
+        android:layout_marginEnd="?attr/contentHorizontalMargin" />
 </merge>

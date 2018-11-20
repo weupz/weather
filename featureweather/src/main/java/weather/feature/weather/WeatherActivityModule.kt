@@ -9,6 +9,10 @@ import weather.di.Cached
 import weather.di.DiCache
 import weather.di.FragmentScope
 import weather.di.get
+import weather.feature.weather.city.CityFragment
+import weather.feature.weather.city.CityFragmentModule
+import weather.feature.weather.city.CityPresenter
+import weather.feature.weather.city.CityViewModel
 import weather.mvi.ViewModel
 
 @Module(includes = [WeatherActivityModule.Binder::class])
@@ -20,7 +24,7 @@ internal object WeatherActivityModule {
         cache: DiCache,
         component: WeatherActivityComponent
     ): WeatherPresenter {
-        return cache.get(presenter) { component.viewModel() }
+        return cache.get(presenter) { component.weatherViewModel() }
     }
 
     @Module
@@ -34,6 +38,12 @@ internal object WeatherActivityModule {
         abstract fun providesWeatherViewModel(@Cached impl: WeatherPresenter): WeatherViewModel
 
         @Binds abstract fun providesViewModel(impl: WeatherViewModel): ViewModel<State>
+
+        @FragmentScope
+        @ContributesAndroidInjector(modules = [CityFragmentModule::class])
+        abstract fun cityFragment(): CityFragment
+
+        @Binds abstract fun providesCityViewModel(impl: CityPresenter): CityViewModel
 
         @Binds abstract fun providesActivity(activity: WeatherActivity): FragmentActivity
     }

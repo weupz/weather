@@ -11,7 +11,7 @@ import com.squareup.moshi.JsonClass
 @Entity(
     tableName = "City",
     indices = [
-        Index("name", "country", name = "city_name_country_index")
+        Index("name", name = "city_name_index")
     ]
 )
 @JsonClass(generateAdapter = true)
@@ -20,13 +20,13 @@ data class City internal constructor(
     @ColumnInfo(name = "id")
     @Json(name = "id")
     val id: Long,
-    @Json(name = "name")
     @ColumnInfo(name = "name")
+    @Json(name = "name")
     val name: String,
-    @Json(name = "country")
     @ColumnInfo(name = "country")
+    @Json(name = "country")
     val country: String,
-    @Json(name = "coord")
     @Embedded(prefix = "coordinate_")
+    @Json(name = "coord")
     val coordinate: Coordinate
 )

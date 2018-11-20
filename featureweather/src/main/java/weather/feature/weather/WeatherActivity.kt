@@ -7,6 +7,7 @@ import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
 import weather.di.component
+import weather.feature.weather.city.CityFragment
 import weather.mvi.ViewModel
 import javax.inject.Inject
 
@@ -24,6 +25,7 @@ class WeatherActivity : AppCompatActivity(), HasSupportFragmentInjector {
         if (savedInstanceState === null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.contentFrame, WeatherFragment())
+                .add(CityFragment(), "search-city")
                 .commit()
         }
     }

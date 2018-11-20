@@ -26,7 +26,7 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_AUTO)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
         AndroidThreeTen.init(this)
         Iconics.init(applicationContext)
         Iconics.registerFont(WeatherIcons())

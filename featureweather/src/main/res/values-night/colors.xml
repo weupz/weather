@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="searchViewBackground">#000000</color>
+    <color name="searchViewPopupBackground">#000000</color>
     <color name="cityBackgroundTint">#000000</color>
     <color name="weatherCardBackground">#4DFFFFFF</color>
 </resources>
