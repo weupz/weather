@@ -3,48 +3,31 @@ package weather.feature.weather
 import androidx.fragment.app.FragmentActivity
 import dagger.Binds
 import dagger.Module
-import dagger.Provides
+import dagger.android.AndroidInjector
 import dagger.android.ContributesAndroidInjector
-import weather.di.Cached
-import weather.di.DiCache
+import dagger.multibindings.ClassKey
+import dagger.multibindings.IntoMap
 import weather.di.FragmentScope
-import weather.di.get
 import weather.feature.weather.city.CityFragment
 import weather.feature.weather.city.CityFragmentModule
 import weather.feature.weather.city.CityPresenter
 import weather.feature.weather.city.CityViewModel
-import weather.mvi.ViewModel
 
-@Module(includes = [WeatherActivityModule.Binder::class])
-internal object WeatherActivityModule {
+@Module(subcomponents = [WeatherFragmentComponent::class])
+internal abstract class WeatherActivityModule {
 
-    private const val presenter = "weather.feature.weather.PRESENTER"
+    @Binds
+    @IntoMap
+    @ClassKey(WeatherFragment::class)
+    abstract fun providesWeatherFragmentInjector(
+        impl: WeatherFragmentComponent.Builder
+    ): AndroidInjector.Factory<*>
 
-    @Provides @JvmStatic @Cached fun providesViewModel(
-        cache: DiCache,
-        component: WeatherActivityComponent
-    ): WeatherPresenter {
-        return cache.get(presenter) { component.weatherViewModel() }
-    }
+    @FragmentScope
+    @ContributesAndroidInjector(modules = [CityFragmentModule::class])
+    abstract fun cityFragment(): CityFragment
 
-    @Module
-    abstract class Binder {
+    @Binds abstract fun providesCityViewModel(impl: CityPresenter): CityViewModel
 
-        @FragmentScope
-        @ContributesAndroidInjector(modules = [WeatherModule::class])
-        abstract fun weatherFragment(): WeatherFragment
-
-        @Binds
-        abstract fun providesWeatherViewModel(@Cached impl: WeatherPresenter): WeatherViewModel
-
-        @Binds abstract fun providesViewModel(impl: WeatherViewModel): ViewModel<State>
-
-        @FragmentScope
-        @ContributesAndroidInjector(modules = [CityFragmentModule::class])
-        abstract fun cityFragment(): CityFragment
-
-        @Binds abstract fun providesCityViewModel(impl: CityPresenter): CityViewModel
-
-        @Binds abstract fun providesActivity(activity: WeatherActivity): FragmentActivity
-    }
+    @Binds abstract fun providesActivity(activity: WeatherActivity): FragmentActivity
 }

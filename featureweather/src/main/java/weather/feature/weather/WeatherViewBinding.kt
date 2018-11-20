@@ -23,9 +23,11 @@ internal class WeatherViewBinding private constructor(private val view: ViewGrou
     var state: State?
         get() = _state
         set(value) {
+            if (_state?.loading != value?.loading) {
+                TransitionManager.beginDelayedTransition(view)
+            }
             _state = value
-            TransitionManager.beginDelayedTransition(view)
-            value?.data?.let { renderData(it, value.unitType) }
+            value?.data?.let { renderData(it, value.loading, value.unitType) }
             this.progressBar = renderProgressBar(this.progressBar, value)
         }
 
@@ -41,6 +43,7 @@ internal class WeatherViewBinding private constructor(private val view: ViewGrou
     private val pressure = view.findViewById<TextView>(R.id.pressure)
     private val humidity = view.findViewById<TextView>(R.id.humidity)
     private val windUnit = view.findViewById<TextView>(R.id.windUnit)
+    private val weatherProgress = view.findViewById<View>(R.id.weatherProgress)
     private var progressBar: View? = null
 
     init {
@@ -71,7 +74,8 @@ internal class WeatherViewBinding private constructor(private val view: ViewGrou
         return progressBar
     }
 
-    private fun renderData(it: Data, unitType: State.UnitType) {
+    private fun renderData(it: Data, loading: Boolean, unitType: State.UnitType) {
+        weatherProgress.visibility = if (loading) View.VISIBLE else View.GONE
         city.text = it.city
         country.text = it.country
         temperature.text = unitType.valueOf(it.temperature).format()

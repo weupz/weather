@@ -3,6 +3,9 @@ package weather.feature.weather
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
 import io.reactivex.Observable
+import io.reactivex.Single
+import io.reactivex.functions.BiFunction
+import io.reactivex.functions.Function
 import io.reactivex.subjects.PublishSubject
 import org.threeten.bp.Duration
 import org.threeten.bp.ZonedDateTime
@@ -31,29 +34,34 @@ internal class WeatherPresenter @Inject constructor(
     override val states: Flowable<State> =
         super.states.distinctUntilChanged().observeOn(schedulers.main)
 
-    override fun createIntents(): Flowable<Event> {
-        val stop = lifecycleEvents.filter { it === LifecycleEvent.Detach }
-            .toFlowable(BackpressureStrategy.LATEST)
-        val sync = state {
-            val attach = lifecycleEvents.filter { it === LifecycleEvent.Attach }
-            Observable.merge(attach, retry)
-        }
-            .flatMap { (_, state) ->
-                val now = ZonedDateTime.now()
-                if (state.data == null ||
-                    state.errorCode > 0 ||
-                    now.isAfter(state.data.nextLoad) ||
-                    now.isEqual(state.data.nextLoad)) {
-                    Flowable.just(Unit)
-                } else {
-                    Flowable.timer(
-                        Duration.between(now, state.data.nextLoad).seconds,
-                        TimeUnit.SECONDS,
-                        schedulers.computation
-                    )
-                }
+    private val repeater: Function<Event, Flowable<Event>> = Function { event ->
+        if (event is Event.Success) {
+            val now = ZonedDateTime.now()
+            val load = if (now.isBefore(event.data.nextLoad)) {
+                val delay = Duration.between(now, event.data.nextLoad)
+                Single.timer(delay.seconds, TimeUnit.SECONDS, schedulers.computation)
+            } else {
+                Single.just(Unit)
             }
-            .switchMap { repository.load().takeUntil(stop) }
+                .zipWith(
+                    lifecycleEvents.filter { it == LifecycleEvent.Attach }.firstOrError(),
+                    BiFunction { a: Any, _: LifecycleEvent -> a }
+                )
+                .flatMapPublisher { load() }
+            Flowable.concat(Flowable.just(event), load)
+        } else {
+            Flowable.just(event)
+        }
+    }
+
+    private fun load(): Flowable<Event> {
+        return repository.load().flatMap(repeater)
+    }
+
+    override fun createIntents(): Flowable<Event> {
+        val sync = retry.toFlowable(BackpressureStrategy.LATEST)
+            .startWith(Unit)
+            .switchMap { load() }
         val toggleUnit = toggleUnit.map<Event> { Event.ToggleUnit }
             .toFlowable(BackpressureStrategy.LATEST)
         return Flowable.merge(sync, toggleUnit)

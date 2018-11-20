@@ -2,13 +2,9 @@ package weather.feature.weather
 
 import io.reactivex.Flowable
 import io.reactivex.Single
-import io.reactivex.functions.Function
-import org.reactivestreams.Publisher
 import org.threeten.bp.Duration
 import org.threeten.bp.ZonedDateTime
 import retrofit2.HttpException
-import weather.data.CityDao
-import weather.data.SelectedCity
 import weather.rest.map
 import weather.rest.service.CurrentWeatherParams
 import weather.rest.service.ForecastService
@@ -24,10 +20,11 @@ import kotlin.math.min
 internal class Repository @Inject constructor(
     private val service: ForecastService,
     private val schedulers: Schedulers,
-    private val dao: CityDao
+    id: Long
 ) {
 
     private val random = Random()
+    private val params = CurrentWeatherParams.CityId(id).toMap()
 
     private fun <T> Single<T>.retryWhenTooManyRequestsOrTimeout() = retryWhen { es ->
         val counter = AtomicInteger()
@@ -46,32 +43,32 @@ internal class Repository @Inject constructor(
         }
     }
 
-    private fun Flowable<Event>.onErrorReturnEvent() = onErrorReturn {
+    private fun Single<Event>.onErrorReturnEvent() = onErrorReturn {
         it.map { code, message -> Event.Error(code, message) }
     }
 
-    private val loader = Function<List<SelectedCity>, Publisher<Event>> {
-        service.cityWeather(CurrentWeatherParams.CityId(it.first().cityId).toMap())
+    private fun calculateNextLoad(date: ZonedDateTime): ZonedDateTime {
+        val now = ZonedDateTime.now()
+        val delay = when {
+            now.minusHours(2).isBefore(date) -> Duration.ofSeconds(0)
+            else -> {
+                val startOfNextDay = now
+                    .toLocalDate()
+                    .plusDays(1)
+                    .atStartOfDay(now.zone)
+                Duration.between(now, startOfNextDay)
+            }
+        }
+        val random = min(delay.seconds, TWO_HOURS_IN_SECOND) + random.nextInt(MAX_RANDOM)
+        return now.plusSeconds(random)
+    }
+
+    fun load(): Flowable<Event> {
+        val start = Single.just(Event.Loading)
+        val data = service.cityWeather(params)
             .subscribeOn(schedulers.io)
             .retryWhenTooManyRequestsOrTimeout()
-            .flatMapPublisher { (_, name, data, sys, _, weather, _, wind, date) ->
-                val now = ZonedDateTime.now()
-                val delay = when {
-                    now.minusHours(2).isBefore(date) -> Duration.ofSeconds(0)
-                    else -> {
-                        val startOfNextDay = now
-                            .toLocalDate()
-                            .plusDays(1)
-                            .atStartOfDay(now.zone)
-                        Duration.between(now, startOfNextDay)
-                    }
-                }
-                val randomDelay = min(delay.seconds, TWO_HOURS_IN_SECOND) + random.nextInt(
-                    MAX_RANDOM
-                )
-                val repeater = Flowable.timer(randomDelay, TimeUnit.SECONDS, schedulers.computation)
-                    .flatMap { load() }
-
+            .map<Event> { (_, name, data, sys, _, weather, _, wind, date) ->
                 val (w) = weather
                 val result = Data(
                     city = name,
@@ -88,20 +85,12 @@ internal class Repository @Inject constructor(
                         unit = WindSpeed.Unit.KilometersPerHour
                     ),
                     pressure = data.pressure * PRESSURE_MULTIPLIER,
-                    nextLoad = now.plusSeconds(randomDelay)
+                    nextLoad = calculateNextLoad(date)
                 )
-                Flowable.merge(Flowable.just(Event.Success(result)), repeater)
+                Event.Success(result)
             }
             .onErrorReturnEvent()
-    }
-
-    fun load(): Flowable<Event> {
-        val start = Flowable.just(Event.Loading)
-        val data = dao.selectedCities()
-            .filter { it.isNotEmpty() }
-            .distinctUntilChanged { a, b -> a.first().cityId == b.first().cityId }
-            .switchMap(loader)
-        return Flowable.concat(start, data)
+        return Single.concat(start, data)
     }
 
     private companion object {

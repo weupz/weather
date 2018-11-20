@@ -49,4 +49,13 @@ class WeatherFragment : Fragment(), WeatherView {
         disposable = null
         super.onStop()
     }
+
+    companion object {
+
+        const val CITY_ID = "city-id"
+
+        fun newInstance(id: Long) = WeatherFragment().apply {
+            arguments = Bundle().apply { putLong(CITY_ID, id) }
+        }
+    }
 }
