@@ -12,6 +12,9 @@
             </intent-filter>
         </activity-alias>
 
-        <activity android:name=".WeatherActivity" />
+        <activity
+            android:name=".WeatherActivity"
+            android:windowSoftInputMode="adjustNothing"
+            android:theme="@style/Theme.Weather.Launch" />
     </application>
 </manifest>

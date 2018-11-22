@@ -12,7 +12,7 @@ data class CityWeather(
     @Json(name = "name")
     val name: String,
     @Json(name = "main")
-    val main: Main,
+    val data: Main,
     @Json(name = "sys")
     val sys: Sys,
     @Json(name = "coord")
@@ -21,8 +21,6 @@ data class CityWeather(
     val weather: List<Weather>,
     @Json(name = "clouds")
     val clouds: Clouds,
-    @Json(name = "visibility")
-    val visibility: Int,
     @Json(name = "wind")
     val wind: Wind,
     @Json(name = "dt") @UnixZonedDateTime
@@ -40,7 +38,7 @@ data class CityWeather(
         @Json(name = "pressure")
         val pressure: Float,
         @Json(name = "humidity")
-        val humidity: Int
+        val humidity: Float
     )
 
     @JsonClass(generateAdapter = true)

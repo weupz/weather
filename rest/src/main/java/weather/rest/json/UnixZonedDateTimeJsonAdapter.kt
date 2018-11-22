@@ -10,11 +10,11 @@ object UnixZonedDateTimeJsonAdapter {
 
     @FromJson @UnixZonedDateTime fun fromJson(unix: Long?): ZonedDateTime? {
         return unix?.let {
-            ZonedDateTime.ofInstant(Instant.ofEpochMilli(it), ZoneOffset.UTC)
+            ZonedDateTime.ofInstant(Instant.ofEpochSecond(it), ZoneOffset.UTC)
         }
     }
 
     @ToJson fun toJson(@UnixZonedDateTime time: ZonedDateTime?): Long? {
-        return time?.withZoneSameInstant(ZoneOffset.UTC)?.toInstant()?.toEpochMilli()
+        return time?.withZoneSameInstant(ZoneOffset.UTC)?.toInstant()?.epochSecond
     }
 }

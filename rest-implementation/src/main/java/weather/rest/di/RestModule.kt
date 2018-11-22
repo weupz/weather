@@ -10,9 +10,9 @@ import okhttp3.Response
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
+import weather.rest.BuildConfig
 import weather.rest.ServiceCreator
 import weather.rest.create
-import weather.rest.implementation.BuildConfig
 import weather.rest.implementation.RetrofitServiceCreator
 import weather.rest.json.IconUriJsonAdapter
 import weather.rest.json.TextZonedDateTimeJsonAdapter
@@ -24,24 +24,25 @@ import javax.inject.Singleton
 @Module
 object RestModule {
 
+    @JvmStatic fun providesMoshi(): Moshi {
+        return Moshi.Builder()
+            .add(UnixZonedDateTimeJsonAdapter)
+            .add(TextZonedDateTimeJsonAdapter)
+            .add(IconUriJsonAdapter)
+            .build()
+    }
+
     @Provides @JvmStatic @Singleton
     internal fun providesServiceCreator(
         client: OkHttpClient,
-        baseUrl: HttpUrl
+        baseUrl: HttpUrl,
+        moshi: Moshi
     ): ServiceCreator {
         val retrofit = Retrofit.Builder()
             .baseUrl(baseUrl)
             .callFactory(client.newBuilder().addNetworkInterceptor(ParamsInterceptor()).build())
-            .addConverterFactory(
-                MoshiConverterFactory.create(
-                    Moshi.Builder()
-                        .add(UnixZonedDateTimeJsonAdapter)
-                        .add(TextZonedDateTimeJsonAdapter)
-                        .add(IconUriJsonAdapter)
-                        .build()
-                )
-            )
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.createAsync())
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
         return RetrofitServiceCreator(retrofit)
     }
