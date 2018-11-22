@@ -19,12 +19,12 @@ object WeatherProject {
         const val kotlin = BuildConfig.kotlinVersion
         const val threeTenBp = "1.3.7"
         const val threeTenAbp = "1.1.1"
-        const val rxJava = "2.2.2"
+        const val rxJava = "2.2.3"
         const val rxAndroid = "2.1.0"
-        const val okHttp = "3.11.0"
-        const val retrofit = "2.4.0"
+        const val okHttp = "3.12.0"
+        const val retrofit = "2.5.0"
         const val sqldelight = "1.0.0-rc2"
-        const val moshi = "1.7.0"
+        const val moshi = "1.8.0"
         const val dagger = "2.19"
         const val glide = "4.8.0"
     }

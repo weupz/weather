@@ -1,4 +1,5 @@
 *.apk
+*.aab
 *.ap_
 
 
@@ -57,3 +58,10 @@ build/
 projectFilesBackup/
 
 google-services.json
+
+#Jekyll
+/docs/_site/
+/docs/.sass-cache/
+/docs/.jekyll-cache/
+/docs/.jekyll-metadata
+
