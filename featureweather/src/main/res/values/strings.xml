@@ -11,5 +11,7 @@
 
     <string name="menu_search_city_label">Search City</string>
     <string name="search_city_hint">Type a city name …</string>
+    <string name="empty_city_message">You did not select a city yet, fortunately it is easy to select one</string>
     <string name="city">City</string>
+    <string name="empty">Empty</string>
 </resources>

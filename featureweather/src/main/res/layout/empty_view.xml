@@ -1,16 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
     android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/emptyIcon"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:contentDescription="@string/empty" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="?attr/contentHorizontalMargin"
+        android:layout_marginTop="?attr/contentDividerDimen"
+        android:layout_marginEnd="?attr/contentHorizontalMargin"
+        android:layout_marginBottom="?attr/contentDividerDimen"
+        android:gravity="center_horizontal"
+        android:text="@string/empty_city_message" />
 
     <Button
         android:id="@+id/searchCity"
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
         android:layout_marginStart="?attr/contentHorizontalMargin"
         android:layout_marginEnd="?attr/contentHorizontalMargin"
         android:text="@string/menu_search_city_label" />
-</FrameLayout>
+</LinearLayout>
