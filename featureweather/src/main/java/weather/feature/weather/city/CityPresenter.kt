@@ -38,7 +38,10 @@ internal class CityPresenter @Inject constructor(
         val update = (relay.filter { it is Long } as Observable<Long>)
             .toFlowable(BackpressureStrategy.LATEST)
             .switchMap { repository.updateCity(it) }
-        return Flowable.merge(search, update)
+        val populate = lifecycleEvents.filter { it == LifecycleEvent.Attach }
+            .toFlowable(BackpressureStrategy.LATEST)
+            .flatMap { repository.populateCities() }
+        return Flowable.merge(search, update, populate)
     }
 
     override fun compose(events: Flowable<Event>): Flowable<State> {

@@ -1,6 +1,6 @@
 package weather.data
 
-interface DataComponent {
+interface DataComponent : DatabaseComponent {
 
-    val cityDao: CityDao
+    val populateCitiesManager: PopulateCitiesManager
 }

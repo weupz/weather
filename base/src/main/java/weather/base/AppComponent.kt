@@ -7,6 +7,8 @@ import dagger.Component
 import okhttp3.Call
 import weather.base.imageloader.ImageLoaderModule
 import weather.data.DataComponent
+import weather.data.DataModule
+import weather.data.DatabaseComponent
 import weather.imageloader.ImageLoaderGlideModule
 import weather.rest.RestComponent
 import weather.rest.di.RestModule
@@ -17,11 +19,12 @@ import javax.inject.Singleton
 
 @Singleton
 @Component(
-    dependencies = [DataComponent::class],
+    dependencies = [DatabaseComponent::class],
     modules = [
         AppModule::class,
         ImageLoaderModule::class,
         RestModule::class,
+        DataModule::class,
         SchedulersModule::class
     ]
 )
@@ -33,7 +36,7 @@ internal interface AppComponent : RestComponent, SchedulersComponent, DataCompon
     @Component.Builder
     interface Builder {
 
-        fun dataComponent(component: DataComponent): Builder
+        fun dataComponent(component: DatabaseComponent): Builder
 
         @BindsInstance fun context(context: Context): Builder
 

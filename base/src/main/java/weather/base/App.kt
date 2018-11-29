@@ -18,7 +18,7 @@ class App : Application() {
     private val component: AppComponent by lazy {
         val moshi = RestModule.providesMoshi()
         DaggerAppComponent.builder()
-            .dataComponent(providesDatabase(this, moshi))
+            .dataComponent(providesDatabase(this))
             .context(this)
             .moshi(moshi)
             .build()

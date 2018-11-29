@@ -2,14 +2,20 @@ package weather.data
 
 import android.content.Context
 import androidx.room.Room
-import com.squareup.moshi.Moshi
+import dagger.Binds
+import dagger.Module
 
-fun providesDatabase(context: Context, moshi: Moshi): DataComponent {
+@Module
+abstract class DataModule {
+
+    @Binds
+    abstract fun bindsPopulateCitiesManager(impl: AndroidPopulateCities): PopulateCitiesManager
+}
+
+fun providesDatabase(context: Context): DatabaseComponent {
     return Room.databaseBuilder(
         context,
         WeatherDatabase::class.java,
         WeatherDatabase.NAME
-    )
-        .addCallback(PopulateCities(context, moshi))
-        .build()
+    ).build()
 }

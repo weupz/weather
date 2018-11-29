@@ -1,13 +1,15 @@
 package weather.data
 
 import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import io.reactivex.Flowable
 import io.reactivex.Single
 
 @Dao
-abstract class CityDao {
+abstract class CityDao internal constructor(val database: WeatherDatabase) {
 
     @Query("SELECT * FROM SelectedCity")
     abstract fun selectedCities(): Flowable<List<SelectedCity>>
@@ -25,4 +27,10 @@ abstract class CityDao {
 
     @Query("SELECT * FROM City WHERE name LIKE :name LIMIT 30")
     abstract fun search(name: String): Single<List<City>>
+
+    @Query("SELECT COUNT(id) FROM City")
+    abstract fun cityCount(): Single<Long>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    abstract fun insertCity(city: City)
 }
