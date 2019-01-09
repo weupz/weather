@@ -14,6 +14,13 @@ object WeatherProject {
     object version {
         const val androidGradle = BuildConfig.androidGradleVersion
         const val androidx = "1.0.0"
+        const val appCompat = "1.0.2"
+        const val fragment = "1.0.0"
+        const val recyclerView = "1.0.0"
+        const val material = "1.0.0"
+        const val constraintLayout = "1.1.3"
+        const val collection = "1.0.0"
+        const val annotation = "1.0.1"
         const val lifecycle = "2.0.0"
         const val room = "2.1.0-alpha02"
         const val kotlin = BuildConfig.kotlinVersion
@@ -33,13 +40,13 @@ object WeatherProject {
         const val lifecycleCommon = "androidx.lifecycle:lifecycle-common:${version.lifecycle}"
         const val lifecycleRuntime = "androidx.lifecycle:lifecycle-runtime:${version.lifecycle}"
         const val archCoreCommon = "androidx.arch.core:core-common:${version.lifecycle}"
-        const val appCompat = "androidx.appcompat:appcompat:${version.androidx}"
-        const val fragment = "androidx.fragment:fragment:${version.androidx}"
-        const val recyclerview = "androidx.recyclerview:recyclerview:${version.androidx}"
-        const val material = "com.google.android.material:material:${version.androidx}"
-        const val constraintLayout = "androidx.constraintlayout:constraintlayout:1.1.3"
-        const val collection = "androidx.collection:collection:${version.androidx}"
-        const val annotation = "androidx.annotation:annotation:${version.androidx}"
+        const val appCompat = "androidx.appcompat:appcompat:${version.appCompat}"
+        const val fragment = "androidx.fragment:fragment:${version.fragment}"
+        const val recyclerview = "androidx.recyclerview:recyclerview:${version.recyclerView}"
+        const val material = "com.google.android.material:material:${version.material}"
+        const val constraintLayout = "androidx.constraintlayout:constraintlayout:${version.constraintLayout}"
+        const val collection = "androidx.collection:collection:${version.collection}"
+        const val annotation = "androidx.annotation:annotation:${version.annotation}"
         const val jetifier = "com.android.tools.build.jetifier:jetifier-processor:1.0.0-beta02"
 
         object Room {
