@@ -67,7 +67,7 @@ references:
   create_google_play_key: &create_google_play_key
     run:
       name: Create Play Console key
-      command: echo $PLAY_CONSOLE_KEY > play_console_key.json >/dev/null
+      command: echo $PLAY_CONSOLE_KEY | base64 -di | tee play_console_key.json >/dev/null
 
 jobs:
   ## Run unit tests
@@ -78,11 +78,11 @@ jobs:
       - *restore_gradle_cache
       - *restore_gems_cache
       - *ruby_dependencies
+      - *decode_android_secret
+      - *decode_android_key
       - *android_dependencies
       - *save_gradle_cache
       - *save_gems_cache
-      - *decode_android_secret
-      - *decode_android_key
       - run:
           name: Run unit tests
           command: bundle exec fastlane unit_tests
@@ -101,12 +101,12 @@ jobs:
       - *restore_gradle_cache
       - *restore_gems_cache
       - *ruby_dependencies
-      - *android_dependencies
-      - *save_gradle_cache
-      - *save_gems_cache
       - *decode_android_secret
       - *decode_android_key
       - *create_google_play_key
+      - *android_dependencies
+      - *save_gradle_cache
+      - *save_gems_cache
       - run:
           name: Deploy to Play Store Alpha
           command: bundle exec fastlane beta
@@ -119,12 +119,12 @@ jobs:
       - *restore_gradle_cache
       - *restore_gems_cache
       - *ruby_dependencies
-      - *android_dependencies
-      - *save_gradle_cache
-      - *save_gems_cache
       - *decode_android_secret
       - *decode_android_key
       - *create_google_play_key
+      - *android_dependencies
+      - *save_gradle_cache
+      - *save_gems_cache
       - run:
           name: Deploy to Play Store
           command: bundle exec fastlane deploy
