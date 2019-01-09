@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     kotlin("android")
@@ -16,11 +18,30 @@ android {
         versionName = app.versionName
     }
 
+    val secret = rootProject.file("secret.properties").inputStream()
+        .use { Properties().apply { load(it) } }
+
+    signingConfigs {
+        getByName("debug") {
+            storeFile = rootProject.file(secret["keystore"]!!)
+            storePassword = secret.getProperty("keystore_password")
+            keyAlias = secret.getProperty("key_alias")
+            keyPassword = secret.getProperty("key_password")
+        }
+        create("release") {
+            storeFile = rootProject.file(secret["keystore"]!!)
+            storePassword = secret.getProperty("keystore_password")
+            keyAlias = secret.getProperty("key_alias")
+            keyPassword = secret.getProperty("key_password")
+        }
+    }
+
     buildTypes {
         getByName("release") {
             isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
             isShrinkResources = true
+            signingConfig = signingConfigs.getByName("release")
         }
     }
 
