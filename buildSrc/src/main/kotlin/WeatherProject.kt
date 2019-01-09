@@ -1,7 +1,7 @@
 object WeatherProject {
 
     object android {
-        const val buildToolsVersion = "28.0.2"
+        const val buildToolsVersion = "28.0.3"
         const val minSdkVersion = 23
         const val compileSdkVersion = 28
         const val targetSdkVersion = 28
