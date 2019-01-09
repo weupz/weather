@@ -137,8 +137,7 @@ workflows:
       - deploy_beta:
           filters:
             branches:
-              only:
-                - master
+              ignore: /.*/
             tags:
               only: /^v[0-9]+\.[0-9]+\.[0-9]+-(alpha|beta)[0-9]+$/
           requires:
@@ -146,8 +145,7 @@ workflows:
       - deploy_production:
           filters:
             branches:
-              only:
-                - master
+              ignore: /.*/
             tags:
               only: /^v[0-9]+\.[0-9]+\.[0-9]+$/
           requires:
