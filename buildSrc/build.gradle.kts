@@ -30,7 +30,7 @@ gradlePlugin {
 buildConfigKotlin {
     sourceSet("main") {
         buildConfig(name = "kotlinVersion", value = "1.3.11")
-        buildConfig(name = "androidGradleVersion", value = "3.2.1")
+        buildConfig(name = "androidGradleVersion", value = "3.3.0")
     }
 }
 
@@ -40,10 +40,10 @@ java {
 }
 
 dependencies {
-    implementation("com.android.tools.build:gradle:3.2.1")
+    implementation("com.android.tools.build:gradle:3.3.0")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.11")
     implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.11")
     implementation("org.jetbrains.kotlin:kotlin-compiler-embeddable:1.3.11")
     implementation("com.android.tools.build.jetifier:jetifier-processor:1.0.0-beta02")
-    api("com.squareup.sqldelight:gradle-plugin:1.0.0-rc2")
+    api("com.squareup.sqldelight:gradle-plugin:1.0.0")
 }
