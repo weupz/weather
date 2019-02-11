@@ -3,5 +3,5 @@ package weather.di
 import javax.inject.Qualifier
 
 @Qualifier
-@Retention(AnnotationRetention.SOURCE)
+@Retention(AnnotationRetention.RUNTIME)
 annotation class Cached

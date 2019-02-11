@@ -3,5 +3,5 @@ package weather.di
 import javax.inject.Scope
 
 @Scope
-@Retention(AnnotationRetention.SOURCE)
+@Retention(AnnotationRetention.RUNTIME)
 annotation class FragmentScope
