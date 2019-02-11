@@ -25,12 +25,14 @@ android {
     }
 
     compileOptions {
-        setSourceCompatibility(JavaVersion.VERSION_1_8)
-        setTargetCompatibility(JavaVersion.VERSION_1_8)
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
 
     libraryVariants.all {
-        generateBuildConfig.enabled = false
+        generateBuildConfigProvider {
+            enabled = false
+        }
     }
 }
 
