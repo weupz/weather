@@ -1,4 +1,5 @@
-[![CircleCI](https://circleci.com/gh/weupz/weather/tree/master.svg?style=svg)](https://circleci.com/gh/weupz/weather/tree/master)
+[![CircleCI](https://circleci.com/gh/weupz/weather/tree/master.svg?style=svg)](https://circleci.com/gh/weupz/weather/tree/master) [![Play Store]https://badgen.net/badge/googleplay/Play Store?color=green&icon&label](https://play.google.com/store/apps/details?id=cf.tukang.weather)
+
 
 ### WeUp Z Weather
 
